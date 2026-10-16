@@ -17,7 +17,7 @@ jobs:
       - name: Extract Project Zip if present
         run: |
           if [ -f "GlideCursor.zip" ]; then
-            echo "Found GlideCursor.zip, extracting..."
+            echo "Unzipping GlideCursor.zip..."
             unzip -o GlideCursor.zip
           fi
 
@@ -27,17 +27,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Gradle
+      - name: Setup Gradle 8.7
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
 
       - name: Build with Gradle
-        run: |
-          chmod +x gradlew || true
-          if [ -f "gradle/wrapper/gradle-wrapper.jar" ]; then
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace
-          fi
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
